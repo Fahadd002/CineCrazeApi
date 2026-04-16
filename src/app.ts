@@ -12,7 +12,6 @@ import qs from "qs";
 import { envVars } from "./app/config/env";
 import { PaymentController } from "./app/modules/payment/payment.controller";
 import cron from "node-cron";
-// import { AppointmentService } from "./app/modules/appointment/appointment.service";
 const app: Application = express();
 app.set("query parser", (str : string) => qs.parse(str));
 app.set("view engine", "ejs");
@@ -42,10 +41,11 @@ app.use(express.urlencoded({ extended: true }));
 
 cron.schedule("*/25 * * * *", async () => {
     try {
-        console.log("Running cron job to cancel unpaid appointments...");
-        // await AppointmentService.cancelUnpaidAppointments();
+        console.log("Running cron job to cancel unpaid Subscription Or Tickets ...");
+        // await SubscriptionService.cancelUnpaidSubscriptions();
+        // await TicketService.cancelUnpaidTickets();
     } catch (error : any) {
-        console.error("Error occurred while canceling unpaid appointments:", error.message);    
+        console.error("Error occurred while canceling unpaid subscriptions or tickets:", error.message);    
     }
 })
 
