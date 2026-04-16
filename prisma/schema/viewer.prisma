@@ -1,0 +1,31 @@
+model Viewer {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  profilePhoto  String?
+  contactNumber String?
+  bio           String?   @db.Text
+  favoriteGenres String[]
+  
+  // Subscription fields
+  subscriptionPlan  SubscriptionPlan @default(FREE)
+  subscriptionEnds  DateTime?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  watchlist     Watchlist[]
+  reviews       Review[]
+  likes         Like[]
+  tickets       Ticket[]
+  subscriptions Subscription[]
+  payments      Payment[]
+
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([subscriptionPlan])
+  @@map("viewers")
+}

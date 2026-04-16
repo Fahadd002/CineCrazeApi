@@ -1,0 +1,34 @@
+model Content {
+  id                String        @id @default(uuid())
+  title             String
+  description       String?       @db.Text
+  posterUrl         String?
+  trailerUrl        String?
+  streamingUrl      String?
+  releaseYear       Int
+  director          String?
+  cast              String[]
+  genres            String[]
+  mediaType         MediaType     @default(MOVIE)
+  
+  accessType        AccessType    @default(FREE)
+  ticketPrice       Float?
+
+  views             Int           @default(0)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  // Relations
+  managerId         String?
+  manager           ContentManager? @relation(fields: [managerId], references: [id])
+  
+  reviews           Review[]
+  watchlist         Watchlist[]
+  tickets           Ticket[]
+
+  @@index([title])
+  @@index([releaseYear])
+  @@index([genres])
+  @@index([accessType])
+  @@map("contents")
+}

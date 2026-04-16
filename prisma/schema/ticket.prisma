@@ -1,0 +1,15 @@
+model Ticket {
+  id            String        @id @default(uuid())
+  viewerId      String
+  viewer        Viewer        @relation(fields: [viewerId], references: [id], onDelete: Cascade)
+  paymentStatus  PaymentStatus     @default(UNPAID)
+  contentId     String
+  content       Content       @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  payment       Payment?
+  purchasedAt   DateTime      @default(now())
+  
+  @@unique([viewerId, contentId])
+  @@index([viewerId])
+  @@index([contentId])
+  @@map("tickets")
+}

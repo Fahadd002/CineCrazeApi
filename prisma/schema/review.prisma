@@ -1,0 +1,27 @@
+model Review {
+  id          String       @id @default(uuid())
+  rating      Int
+  tags        String[]
+  hasSpoiler  Boolean      @default(false)
+  status      ReviewStatus @default(APPROVED)
+  likesCount  Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  viewerId    String
+  viewer      Viewer       @relation(fields: [viewerId], references: [id], onDelete: Cascade)
+  
+  contentId   String
+  content     Content      @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  
+  parentId    String?
+  parent      Review?      @relation("ReviewReplies", fields: [parentId], references: [id])
+  replies     Review[]     @relation("ReviewReplies")
+  
+  likes       Like[]
+
+  @@index([viewerId])
+  @@index([contentId])
+  @@index([status])
+  @@map("reviews")
+}

@@ -1,0 +1,57 @@
+enum Role {
+  ADMIN
+  CONTENT_MANAGER
+  VIEWER
+  SUPER_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  BLOCKED
+  DELETED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum PaymentStatus {
+  PAID
+  UNPAID
+  FAILED
+  REFUNDED
+  PENDING
+}
+
+enum AccessType {
+  FREE        
+  SUBSCRIPTION 
+  TICKET   
+  BOTH 
+}
+
+enum SubscriptionPlan {
+  FREE
+  PREMIUM_MONTHLY
+  PREMIUM_YEARLY
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum MediaType {
+  MOVIE
+  TV_SERIES
+}
+
+enum PaymentPurpose {
+  TICKET_PURCHASE
+  SUBSCRIPTION_PURCHASE
+  SUBSCRIPTION_RENEWAL
+  REFUND
+}

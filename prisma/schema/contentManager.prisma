@@ -1,0 +1,23 @@
+model ContentManager {
+  id            String   @id @default(uuid(7))
+  name          String
+  email         String   @unique
+  profilePhoto  String?
+  contactNumber String?
+   gender              Gender
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // content control
+  contents      Content[]
+
+  // relation
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@map("content_managers")
+}
+

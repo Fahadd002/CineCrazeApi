@@ -1,0 +1,23 @@
+model Subscription {
+  id            String           @id @default(uuid())
+  plan          SubscriptionPlan
+  amount        Float
+  startDate     DateTime         @default(now())
+  endDate       DateTime
+  status        PaymentStatus    @default(PENDING)
+  autoRenew     Boolean          @default(false)
+  
+  viewerId      String
+  viewer        Viewer           @relation(fields: [viewerId], references: [id], onDelete: Cascade)
+  
+  // Subscription can have multiple payments (for renewals)
+  payments      Payment[]
+  
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  
+  @@index([viewerId])
+  @@index([status])
+  @@index([endDate])
+  @@map("subscriptions")
+}

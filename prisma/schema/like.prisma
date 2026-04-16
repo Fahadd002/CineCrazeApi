@@ -1,0 +1,13 @@
+model Like {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  
+  viewerId    String
+  viewer      Viewer    @relation(fields: [viewerId], references: [id], onDelete: Cascade)
+  
+  reviewId    String
+  review      Review    @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  
+  @@unique([viewerId, reviewId])
+  @@map("likes")
+}
