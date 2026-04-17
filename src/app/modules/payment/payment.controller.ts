@@ -7,6 +7,7 @@ import { stripe } from "../../config/stripe.config";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { PaymentService } from "./payment.service";
+import { IRequestUser } from "../../interfaces/requestUser.interface";
 
 const handleStripeWebhookEvent = catchAsync(async (req : Request, res : Response) => {
     const signature = req.headers['stripe-signature'] as string
@@ -45,6 +46,21 @@ const handleStripeWebhookEvent = catchAsync(async (req : Request, res : Response
     }
 })
 
+const createCheckoutSession = catchAsync(async (req : Request, res : Response) => {
+    const { contentId } = req.body;
+    const user = req.user as IRequestUser;
+
+    const session = await PaymentService.createCheckoutSession(user.userId, contentId);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Stripe checkout session created successfully",
+        data: session,
+    });
+});
+
 export const PaymentController = {
-    handleStripeWebhookEvent
+    handleStripeWebhookEvent,
+    createCheckoutSession,
 }
