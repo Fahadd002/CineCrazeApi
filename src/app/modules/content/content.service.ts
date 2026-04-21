@@ -1,10 +1,13 @@
 import status from "http-status";
-import { Prisma } from "../../../generated/prisma/client";
+import { Content, Prisma } from "../../../generated/prisma/client";
 import { AccessType, MediaType, PaymentStatus, Role } from "../../../generated/prisma/enums";
 import AppError from "../../errorHelpers/AppError";
 import { prisma } from "../../lib/prisma";
 import { IRequestUser } from "../../interfaces/requestUser.interface";
 import { ICreateContentPayload, IUpdateContentPayload } from "./content.interface";
+import { IQueryParams } from "../../interfaces/query.interface";
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import { contentFilterableFields, contentIncludeConfig, contentSearchableFields } from "./content.constant";
 
 const createContent = async (payload: ICreateContentPayload, user: IRequestUser) => {
     if (user.role !== Role.CONTENT_MANAGER && user.role !== Role.ADMIN && user.role !== Role.SUPER_ADMIN) {
@@ -32,16 +35,38 @@ const createContent = async (payload: ICreateContentPayload, user: IRequestUser)
     return content;
 };
 
-const getAllContents = async () => {
-    const contents = await prisma.content.findMany({
-        where: {},
-        orderBy: {
-            createdAt: "desc",
-        }
-    });
+const getAllContents = async (query: IQueryParams) => {
+    const { genre } = query;
+    const queryBuilder = new QueryBuilder<Content, Prisma.ContentWhereInput, Prisma.ContentInclude>(prisma.content, query, {
+        filterableFields: contentFilterableFields,
+        searchableFields: contentSearchableFields
+    })
 
-    return contents;
-};
+    const result = await queryBuilder
+        .search()
+        .filter()
+        .paginate()
+        .dynamicInclude(contentIncludeConfig)
+        .sort()
+        .execute();
+
+    if (genre && result.data.length > 0) {
+         // Split multiple genres by comma
+        const genreList = (genre as string).split(',').map(g => g.trim());
+
+        // Filter content that includes ALL selected genres
+        result.data = result.data.filter(content =>
+            genreList.every(selectedGenre =>
+                content.genres.includes(selectedGenre)
+            )
+        );
+
+        // Update total count after filtering
+        result.meta.total = result.data.length;
+        result.meta.totalPages = Math.ceil(result.data.length / result.meta.limit);
+    }
+    return result;
+}
 
 const getContentById = async (id: string) => {
     const content = await prisma.content.findUnique({

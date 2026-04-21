@@ -5,6 +5,7 @@ import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { ContentService } from "./content.service";
 import { createContentZodSchema, updateContentZodSchema } from "./content.validation";
+import { IQueryParams } from "../../interfaces/query.interface";
 
 const parseStringArray = (value: unknown): string[] | undefined => {
     if (Array.isArray(value)) return value as string[];
@@ -88,18 +89,18 @@ const createContent = catchAsync(
     }
 );
 
-const getAllContents = catchAsync(
-    async (req: Request, res: Response) => {
-        const contents = await ContentService.getAllContents();
-
-        sendResponse(res, {
-            httpStatusCode: status.OK,
-            success: true,
-            message: "Contents fetched successfully",
-            data: contents,
-        });
-    }
-);
+const getAllContents = catchAsync(async (req: Request, res: Response) => {
+    const query = req.query;
+    const result  = await ContentService.getAllContents(query as IQueryParams);
+    sendResponse(res, {
+        success: true,
+        httpStatusCode: status.OK,
+        message: 'All doctor schedules retrieved successfully',
+        data: result.data,
+        meta: result.meta
+    });
+   console.log(result);
+});
 
 const getContentById = catchAsync(
     async (req: Request, res: Response) => {

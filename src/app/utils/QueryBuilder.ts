@@ -95,7 +95,7 @@ export class QueryBuilder<T, TWhereInput = Record<string, unknown>, TInclude = R
     filter(): this {
 
         const { filterableFields } = this.config;
-        const excludedField = ['searchTerm', 'page', 'limit', 'sortBy', 'sortOrder', 'fields', 'include'];
+        const excludedField = ['searchTerm', 'page', 'limit', 'sortBy', 'sortOrder', 'fields', 'include', 'genre'];
 
         const filterParams: Record<string, unknown> = {};
 
