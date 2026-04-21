@@ -12,6 +12,7 @@ router.get("/me", checkAuth(Role.ADMIN, Role.VIEWER, Role.CONTENT_MANAGER, Role.
 router.post("/change-password", checkAuth(Role.ADMIN, Role.VIEWER, Role.CONTENT_MANAGER, Role.SUPER_ADMIN), AuthController.changePassword)
 router.post("/logout", checkAuth(Role.ADMIN, Role.VIEWER, Role.CONTENT_MANAGER, Role.SUPER_ADMIN), AuthController.logoutUser)
 router.post("/verify-email", AuthController.verifyEmail)
+router.post("/resend-verification-otp", AuthController.resendVerificationOtp)
 router.post("/forget-password", AuthController.forgetPassword)
 router.post("/reset-password", AuthController.resetPassword)
 

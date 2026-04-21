@@ -196,6 +196,20 @@ const resetPassword = catchAsync(
     }
 )
 
+const resendVerificationOtp = catchAsync(
+    async (req: Request, res: Response) => {
+        const { email } = req.body;
+
+        await AuthService.resendVerificationOtp(email);
+
+        sendResponse(res, {
+            httpStatusCode: status.OK,
+            success: true,
+            message: "A new verification OTP has been sent to your email address.",
+        });
+    }
+);
+
 // /api/v1/auth/login/google?redirect=/profile
 const googleLogin = catchAsync((req: Request, res: Response) => {
     const redirectPath = req.query.redirect || "/dashboard";
@@ -264,5 +278,6 @@ export const AuthController = {
     resetPassword,
     googleLogin,
     googleLoginSuccess,
-    handleOAuthError
+    handleOAuthError,
+    resendVerificationOtp
 };
