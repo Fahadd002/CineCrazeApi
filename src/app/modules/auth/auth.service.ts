@@ -288,13 +288,14 @@ const logoutUser = async (sessionToken: string) => {
 }
 
 const varifyEmail = async (email: string, otp: string) => {
+    console.log(email, otp);
     const result = await auth.api.verifyEmailOTP({
         body: {
             email,
             otp,
         }
     })
-
+console.log(result);
     if (result.status && !result.user.emailVerified) {
         await prisma.user.update({
             where: {

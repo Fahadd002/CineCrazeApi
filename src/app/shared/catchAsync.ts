@@ -9,7 +9,7 @@ export const catchAsync = (fn: RequestHandler) => {
             console.log(error);
             res.status(500).json({
                 success: false,
-                message: 'Failed to fetch',
+                message: error.message,
                 error: error.message
             });
         }

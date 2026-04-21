@@ -99,7 +99,6 @@ const getAllContents = catchAsync(async (req: Request, res: Response) => {
         data: result.data,
         meta: result.meta
     });
-   console.log(result);
 });
 
 const getContentById = catchAsync(
