@@ -77,6 +77,8 @@ const getNewToken = catchAsync(
     async (req: Request, res: Response) => {
         const refreshToken = req.cookies.refreshToken;
         const betterAuthSessionToken = req.cookies["better-auth.session_token"];
+       
+       
         if (!refreshToken) {
             throw new AppError(status.UNAUTHORIZED, "Refresh token is missing");
         }
@@ -127,21 +129,9 @@ const logoutUser = catchAsync(
     async (req: Request, res: Response) => {
         const betterAuthSessionToken = req.cookies["better-auth.session_token"];
         const result = await AuthService.logoutUser(betterAuthSessionToken);
-        cookieUtils.clearCookie(res, 'accessToken', {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-        });
-        cookieUtils.clearCookie(res, 'refreshToken', {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-        });
-        cookieUtils.clearCookie(res, 'better-auth.session_token', {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-        });
+        cookieUtils.clearCookie(res, 'accessToken', tokenUtils.baseCookieOptions);
+        cookieUtils.clearCookie(res, 'refreshToken', tokenUtils.baseCookieOptions);
+        cookieUtils.clearCookie(res, 'better-auth.session_token', tokenUtils.baseCookieOptions);
 
         sendResponse(res, {
             httpStatusCode: status.OK,

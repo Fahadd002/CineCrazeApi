@@ -95,7 +95,7 @@ const getAllContents = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         success: true,
         httpStatusCode: status.OK,
-        message: 'All doctor schedules retrieved successfully',
+        message: 'All content retrieved successfully',
         data: result.data,
         meta: result.meta
     });

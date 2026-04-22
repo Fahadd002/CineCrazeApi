@@ -4,6 +4,14 @@ import { envVars } from "../config/env";
 import { Response } from "express";
 import { cookieUtils } from "./cookie";
 
+const isProduction = envVars.NODE_ENV === "production";
+const baseCookieOptions = {
+    httpOnly: true,
+    path: "/",
+    secure: isProduction,
+    sameSite: (isProduction ? "none" : "lax") as "none" | "lax",
+} as const;
+
 
 const getAccessToken = (payload: JwtPayload) => {
     const accessToken = jwtUtils.createToken(payload, envVars.ACCESS_TOKEN_SECRET, { expiresIn: envVars.ACCESS_TOKEN_EXPIRES_IN } as SignOptions);
@@ -17,10 +25,7 @@ const getRefreshToken = (payload: JwtPayload) => {
 
 const setAccessTokenCookie = (res: Response, token: string) => {
     cookieUtils.setCookie(res, 'accessToken', token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        path: '/',
+        ...baseCookieOptions,
                 //1 day
         maxAge: 60 * 60 * 60 * 24 * 1000,
     });
@@ -28,10 +33,7 @@ const setAccessTokenCookie = (res: Response, token: string) => {
 
 const setRefreshTokenCookie = (res: Response, token: string) => {
     cookieUtils.setCookie(res, 'refreshToken', token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        path: '/',
+        ...baseCookieOptions,
         //7d
         maxAge: 60 * 60 * 60 * 24 * 7 * 1000,
     });
@@ -39,10 +41,7 @@ const setRefreshTokenCookie = (res: Response, token: string) => {
 
 const setBetterAuthSessionCookie = (res: Response, token: string) => {
     cookieUtils.setCookie(res, 'better-auth.session_token', token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        path: '/',
+        ...baseCookieOptions,
          //1 day
         maxAge: 60 * 60 * 60 * 24 * 1000,
     });
@@ -53,5 +52,6 @@ export const tokenUtils = {
     getRefreshToken,
     setAccessTokenCookie,
     setRefreshTokenCookie,
-    setBetterAuthSessionCookie
+    setBetterAuthSessionCookie,
+    baseCookieOptions,
 }
