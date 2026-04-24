@@ -10,20 +10,20 @@ const createManager = async (payload: ICreateManagerPayload) => {
     // Check if user already exists in auth system
     const userExists = await prisma.user.findUnique({
         where: {
-            email: payload.manager.email  
+            email: payload.contentManager.email  
         }
     });
     
     if (userExists) {
-        throw new AppError(status.CONFLICT, `User with email ${payload.manager.email} already exists`);
+        throw new AppError(status.CONFLICT, `User with email ${payload.contentManager.email} already exists`);
     }
 
     const userData = await auth.api.signUpEmail({
         body: {
-            email: payload.manager.email,
+            email: payload.contentManager.email,
             password: payload.password,
             role: Role.CONTENT_MANAGER,
-            name: payload.manager.name,
+            name: payload.contentManager.name,
             needPasswordChange: true
         }
     });
@@ -39,7 +39,7 @@ const createManager = async (payload: ICreateManagerPayload) => {
             const managerData = await tx.contentManager.create({
                 data: {
                     userId: userData.user.id,
-                    ...payload.manager,
+                    ...payload.contentManager,
                 }
             });
 
