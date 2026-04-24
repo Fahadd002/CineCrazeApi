@@ -65,9 +65,57 @@ const getAllContents = async (query: IQueryParams) => {
         result.meta.total = result.data.length;
         result.meta.totalPages = Math.ceil(result.data.length / result.meta.limit);
     }
-    return result;
+    return result
 }
 
+const getMyContents = async (user: IRequestUser, query: IQueryParams) => {
+    if (user.role !== Role.CONTENT_MANAGER && user.role !== Role.ADMIN && user.role !== Role.SUPER_ADMIN) {
+        throw new AppError(status.FORBIDDEN, "Only content managers or admins can access this resource");
+    }
+
+    if (user.role === Role.CONTENT_MANAGER) {
+        const manager = await prisma.contentManager.findUnique({
+            where: {
+                userId: user.userId,
+            }
+        });
+
+        if (!manager) {
+            throw new AppError(status.NOT_FOUND, "Content manager not found");
+        }
+
+        query.managerId = manager.id;
+    }
+
+    const { genre } = query;
+    const queryBuilder = new QueryBuilder<Content, Prisma.ContentWhereInput, Prisma.ContentInclude>(prisma.content, query, {
+        filterableFields: contentFilterableFields,
+        searchableFields: contentSearchableFields
+    })
+
+    const result = await queryBuilder
+        .search()
+        .filter()
+        .paginate()
+        .dynamicInclude(contentIncludeConfig)
+        .sort()
+        .execute();
+
+    if (genre && result.data.length > 0) {
+        const genreList = (genre as string).split(',').map(g => g.trim());
+
+        result.data = result.data.filter(content =>
+            genreList.every(selectedGenre =>
+                content.genres.includes(selectedGenre)
+            )
+        );
+
+        result.meta.total = result.data.length;
+        result.meta.totalPages = Math.ceil(result.data.length / result.meta.limit);
+    }
+    return result
+}
+   
 const getContentById = async (id: string) => {
     const content = await prisma.content.findUnique({
         where: { id },
@@ -210,6 +258,7 @@ const canViewerWatchContent = async (contentId: string, user: IRequestUser) => {
 export const ContentService = {
     createContent,
     getAllContents,
+    getMyContents,
     getContentById,
     updateContent,
     deleteContent,

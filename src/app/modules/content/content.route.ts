@@ -8,6 +8,11 @@ const router = Router();
 
 router.get("/", ContentController.getAllContents);
 router.get(
+    "/my-contents",
+    checkAuth(Role.CONTENT_MANAGER, Role.ADMIN, Role.SUPER_ADMIN),
+    ContentController.getMyContents
+);
+router.get(
     "/:id/watch",
     checkAuth(Role.VIEWER, Role.CONTENT_MANAGER, Role.ADMIN, Role.SUPER_ADMIN),
     ContentController.getWatchableContent

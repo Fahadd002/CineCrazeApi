@@ -166,9 +166,25 @@ const getWatchableContent = catchAsync(
     }
 );
 
+const getMyContents = catchAsync(
+    async (req: Request, res: Response) => {
+        const user = req.user!;
+        const query = req.query as IQueryParams;
+        const result  = await ContentService.getMyContents(user, query);
+        sendResponse(res, {
+            success: true,
+            httpStatusCode: status.OK,
+            message: 'My contents retrieved successfully',
+            data: result.data,
+            meta: result.meta
+        });
+    }
+);
+
 export const ContentController = {
     createContent,
     getAllContents,
+    getMyContents,
     getContentById,
     updateContent,
     deleteContent,
