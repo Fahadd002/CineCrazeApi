@@ -24,8 +24,6 @@ router.post(
     checkAuth(Role.CONTENT_MANAGER, Role.ADMIN, Role.SUPER_ADMIN),
     multerMemoryUpload.fields([
         { name: "posterImage", maxCount: 1 },
-        { name: "trailerVideo", maxCount: 1 },
-        { name: "streamingVideo", maxCount: 1 },
     ]),
     ContentController.createContent
 );
@@ -35,8 +33,6 @@ router.patch(
     checkAuth(Role.CONTENT_MANAGER, Role.ADMIN, Role.SUPER_ADMIN),
     multerMemoryUpload.fields([
         { name: "posterImage", maxCount: 1 },
-        { name: "trailerVideo", maxCount: 1 },
-        { name: "streamingVideo", maxCount: 1 },
     ]),
     ContentController.updateContent
 );
@@ -48,4 +44,3 @@ router.delete(
 );
 
 export const ContentRoutes = router;
-

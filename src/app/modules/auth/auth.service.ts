@@ -339,7 +339,7 @@ const resendVerificationOtp = async (email: string) => {
 const forgetPassword = async (email: string) => {
     const isUserExist = await prisma.user.findUnique({
         where: {
-            email,
+            email
         }
     });
 
