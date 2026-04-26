@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import status from "http-status";
-import { uploadFileToCloudinary } from "../../config/cloudinary.config";
 import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 import { ContentService } from "./content.service";
 import { createContentZodSchema, updateContentZodSchema } from "./content.validation";
 import { IQueryParams } from "../../interfaces/query.interface";
+import { deleteFileFromCloudinary } from "../../config/cloudinary.config";
 
 const parseStringArray = (value: unknown): string[] | undefined => {
     if (Array.isArray(value)) return value as string[];
@@ -47,38 +47,21 @@ const normalizeContentPayload = (req: Request) => {
   return normalizedPayload;
 };
 
-const uploadContentMediaFiles = async (req: Request) => {
-    const files = req.files as Record<string, Express.Multer.File[]> | undefined;
-    const mediaUrls: { posterUrl?: string; trailerUrl?: string; streamingUrl?: string } = {};
 
-    const posterImage = files?.posterImage?.[0];
-    if (posterImage?.buffer) {
-        const uploaded = await uploadFileToCloudinary(posterImage.buffer, posterImage.originalname);
-        mediaUrls.posterUrl = uploaded.secure_url;
-    }
-
-    const trailerVideo = files?.trailerVideo?.[0];
-    if (trailerVideo?.buffer) {
-        const uploaded = await uploadFileToCloudinary(trailerVideo.buffer, trailerVideo.originalname);
-        mediaUrls.trailerUrl = uploaded.secure_url;
-    }
-
-    const streamingVideo = files?.streamingVideo?.[0];
-    if (streamingVideo?.buffer) {
-        const uploaded = await uploadFileToCloudinary(streamingVideo.buffer, streamingVideo.originalname);
-        mediaUrls.streamingUrl = uploaded.secure_url;
-    }
-
-    return mediaUrls;
-};
 
 const createContent = catchAsync(
     async (req: Request, res: Response) => {
         const user = req.user!;
         const payload = createContentZodSchema.parse(normalizeContentPayload(req));
-        const mediaUrls = await uploadContentMediaFiles(req);
 
-        const content = await ContentService.createContent({ ...payload, ...mediaUrls }, user);
+        // Extract poster URL from uploaded file (CloudinaryStorage sets file.path)
+        const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+        const posterFile = files?.posterImage?.[0];
+        if (posterFile?.path) {
+            payload.posterUrl = posterFile.path;
+        }
+
+        const content = await ContentService.createContent(payload, user);
 
         sendResponse(res, {
             httpStatusCode: status.CREATED,
@@ -121,9 +104,17 @@ const updateContent = catchAsync(
         const id = req.params.id as string;
         const user = req.user!;
         const payload = updateContentZodSchema.parse(normalizeContentPayload(req));
-        const mediaUrls = await uploadContentMediaFiles(req);
 
-        const content = await ContentService.updateContent(id, { ...payload, ...mediaUrls }, user);
+        const files = req.files as Record<string, Express.Multer.File[]> | undefined;
+        const posterFile = files?.posterImage?.[0];
+        if (posterFile?.path) {
+            payload.posterUrl = posterFile.path;
+        }
+
+        console.log("Normalized Payload in Controller:", payload);
+
+
+        const content = await ContentService.updateContent(id, payload, user);
 
         sendResponse(res, {
             httpStatusCode: status.OK,
@@ -138,6 +129,19 @@ const deleteContent = catchAsync(
     async (req: Request, res: Response) => {
         const id = req.params.id as string;
         const user = req.user!;
+
+        // Get content first to retrieve posterUrl for Cloudinary deletion
+        const existing = await ContentService.getContentById(id);
+        
+        // Delete poster from Cloudinary if exists
+        if (existing.posterUrl) {
+            try {
+                await deleteFileFromCloudinary(existing.posterUrl);
+            } catch (error) {
+                console.error("Failed to delete poster from Cloudinary:", error);
+                // Continue with DB deletion even if Cloudinary delete fails
+            }
+        }
 
         await ContentService.deleteContent(id as string, user);
 

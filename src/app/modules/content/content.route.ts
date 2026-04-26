@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Role } from "../../../generated/prisma/enums";
-import { multerMemoryUpload } from "../../config/multer.config";
+import { multerUpload } from "../../config/multer.config";
 import { checkAuth } from "../../middleware/checkAuth";
 import { ContentController } from "./content.controller";
 
@@ -22,7 +22,7 @@ router.get("/:id", ContentController.getContentById);
 router.post(
     "/",
     checkAuth(Role.CONTENT_MANAGER, Role.ADMIN, Role.SUPER_ADMIN),
-    multerMemoryUpload.fields([
+    multerUpload.fields([
         { name: "posterImage", maxCount: 1 },
     ]),
     ContentController.createContent
@@ -31,7 +31,7 @@ router.post(
 router.patch(
     "/:id",
     checkAuth(Role.CONTENT_MANAGER, Role.ADMIN, Role.SUPER_ADMIN),
-    multerMemoryUpload.fields([
+    multerUpload.fields([
         { name: "posterImage", maxCount: 1 },
     ]),
     ContentController.updateContent
