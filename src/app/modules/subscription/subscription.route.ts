@@ -6,6 +6,7 @@ import { SubscriptionController } from "./subscription.controller";
 const router = Router();
 
 router.get("/my-subscriptions", checkAuth(Role.VIEWER), SubscriptionController.getMySubscriptions);
+router.get("/plans", SubscriptionController.getSubscriptionPlans);
 router.post("/", checkAuth(Role.VIEWER), SubscriptionController.createSubscription);
 router.patch("/:subscriptionId/cancel", checkAuth(Role.VIEWER), SubscriptionController.cancelSubscription);
 

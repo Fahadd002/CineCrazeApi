@@ -18,9 +18,13 @@ app.set("query parser", (str : string) => qs.parse(str));
 app.set("view engine", "ejs");
 app.set("views",path.resolve(process.cwd(), `src/app/templates`))
 
+// CRITICAL: Webhook route must be BEFORE any JSON middleware
+// Stripe needs the raw body for signature verification
 app.post(
   "/webhook",
-  express.raw({ type: "application/json" }),PaymentController.handleStripeWebhookEvent);
+  express.raw({ type: "application/json" }),
+  PaymentController.handleStripeWebhookEvent
+);
 
 app.use(cors({
     origin : [envVars.FRONTEND_URL, envVars.BETTER_AUTH_URL, "http://localhost:3000", "http://localhost:5000"],

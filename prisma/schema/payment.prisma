@@ -7,13 +7,13 @@ model Payment {
     paymentGatewayData Json?
     createdAt          DateTime      @default(now())
     updatedAt          DateTime      @updatedAt
-    purpose            String // TICKET_PURCHASE, SUBSCRIPTION_PURCHASE, SUBSCRIPTION_RENEWAL
+    purpose            String? // TICKET_PURCHASE, SUBSCRIPTION_PURCHASE, SUBSCRIPTION_RENEWAL
 
     viewerId String
     viewer   Viewer @relation(fields: [viewerId], references: [id], onDelete: Cascade)
 
-    ticketId       String        @unique
-    ticket         Ticket        @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+    ticketId       String?       @unique
+    ticket         Ticket?       @relation(fields: [ticketId], references: [id], onDelete: Cascade)
     // One-to-many relationship with Subscription
     subscriptionId String?
     subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
