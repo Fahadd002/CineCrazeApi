@@ -165,6 +165,38 @@ const deleteReview = async (reviewId: string, user: IRequestUser) => {
     return null;
 };
 
+
+
+const getMyReviews = async (user: IRequestUser) => {
+    const viewer = await getViewerOrThrow(user);
+
+    const reviews = await prisma.review.findMany({
+        where: {
+            viewerId: viewer.id,
+            parentId: null, // Only top-level reviews
+        },
+        include: {
+            viewer: true,
+            content: true,
+            likes: true,
+            replies: {
+                include: {
+                    viewer: true,
+                    likes: true,
+                },
+                orderBy: {
+                    createdAt: "asc",
+                }
+            }
+        },
+        orderBy: {
+            createdAt: "desc",
+        }
+    });
+
+    return reviews;
+};
+
 const toggleLike = async (reviewId: string, user: IRequestUser) => {
     const viewer = await getViewerOrThrow(user);
 
@@ -233,8 +265,13 @@ const toggleLike = async (reviewId: string, user: IRequestUser) => {
 export const ReviewService = {
     createReview,
     getReviewsByContent,
+    getMyReviews,
     updateReview,
     deleteReview,
     toggleLike,
 };
+
+
+
+
 

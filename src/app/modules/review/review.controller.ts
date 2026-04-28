@@ -60,6 +60,19 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const getMyReviews = catchAsync(async (req: Request, res: Response) => {
+    const user = req.user!;
+
+    const result = await ReviewService.getMyReviews(user);
+
+    sendResponse(res, {
+        httpStatusCode: status.OK,
+        success: true,
+        message: "Reviews fetched successfully",
+        data: result,
+    });
+});
+
 const toggleLike = catchAsync(async (req: Request, res: Response) => {
     const user = req.user!;
     const reviewId = req.params.reviewId as string;
@@ -69,7 +82,7 @@ const toggleLike = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         httpStatusCode: status.OK,
         success: true,
-        message: "Review like updated successfully",
+        message: "Like toggled successfully",
         data: result,
     });
 });
@@ -77,6 +90,7 @@ const toggleLike = catchAsync(async (req: Request, res: Response) => {
 export const ReviewController = {
     createReview,
     getReviewsByContent,
+    getMyReviews,
     updateReview,
     deleteReview,
     toggleLike,

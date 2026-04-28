@@ -8,6 +8,7 @@ import { createReviewZodSchema, updateReviewZodSchema } from "./review.validatio
 const router = Router();
 
 router.get("/content/:contentId", ReviewController.getReviewsByContent);
+router.get("/my-reviews", checkAuth(Role.VIEWER), ReviewController.getMyReviews);
 router.post("/", checkAuth(Role.VIEWER), validateRequest(createReviewZodSchema), ReviewController.createReview);
 router.patch("/:reviewId", checkAuth(Role.VIEWER), validateRequest(updateReviewZodSchema), ReviewController.updateReview);
 router.delete("/:reviewId", checkAuth(Role.VIEWER), ReviewController.deleteReview);
