@@ -303,9 +303,9 @@ export type TicketOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type TicketScalarRelationFilter = {
-  is?: Prisma.TicketWhereInput
-  isNot?: Prisma.TicketWhereInput
+export type TicketNullableScalarRelationFilter = {
+  is?: Prisma.TicketWhereInput | null
+  isNot?: Prisma.TicketWhereInput | null
 }
 
 export type TicketViewerIdContentIdCompoundUniqueInput = {
@@ -385,10 +385,12 @@ export type TicketCreateNestedOneWithoutPaymentInput = {
   connect?: Prisma.TicketWhereUniqueInput
 }
 
-export type TicketUpdateOneRequiredWithoutPaymentNestedInput = {
+export type TicketUpdateOneWithoutPaymentNestedInput = {
   create?: Prisma.XOR<Prisma.TicketCreateWithoutPaymentInput, Prisma.TicketUncheckedCreateWithoutPaymentInput>
   connectOrCreate?: Prisma.TicketCreateOrConnectWithoutPaymentInput
   upsert?: Prisma.TicketUpsertWithoutPaymentInput
+  disconnect?: Prisma.TicketWhereInput | boolean
+  delete?: Prisma.TicketWhereInput | boolean
   connect?: Prisma.TicketWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TicketUpdateToOneWithWhereWithoutPaymentInput, Prisma.TicketUpdateWithoutPaymentInput>, Prisma.TicketUncheckedUpdateWithoutPaymentInput>
 }

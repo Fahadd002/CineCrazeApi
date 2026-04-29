@@ -36,5 +36,5 @@ const storage = new CloudinaryStorage({
 
 export const multerUpload = multer({ 
     storage,
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB max file size
+    limits: { fileSize: 4 * 1024 * 1024 } // 4MB max file size (Vercel serverless limit)
 });

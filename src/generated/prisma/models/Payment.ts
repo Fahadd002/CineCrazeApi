@@ -226,9 +226,9 @@ export type PaymentGroupByOutputType = {
   paymentGatewayData: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
-  purpose: string
+  purpose: string | null
   viewerId: string
-  ticketId: string
+  ticketId: string | null
   subscriptionId: string | null
   _count: PaymentCountAggregateOutputType | null
   _avg: PaymentAvgAggregateOutputType | null
@@ -264,12 +264,12 @@ export type PaymentWhereInput = {
   paymentGatewayData?: Prisma.JsonNullableFilter<"Payment">
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
-  purpose?: Prisma.StringFilter<"Payment"> | string
+  purpose?: Prisma.StringNullableFilter<"Payment"> | string | null
   viewerId?: Prisma.StringFilter<"Payment"> | string
-  ticketId?: Prisma.StringFilter<"Payment"> | string
+  ticketId?: Prisma.StringNullableFilter<"Payment"> | string | null
   subscriptionId?: Prisma.StringNullableFilter<"Payment"> | string | null
   viewer?: Prisma.XOR<Prisma.ViewerScalarRelationFilter, Prisma.ViewerWhereInput>
-  ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
+  ticket?: Prisma.XOR<Prisma.TicketNullableScalarRelationFilter, Prisma.TicketWhereInput> | null
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
 }
 
@@ -282,9 +282,9 @@ export type PaymentOrderByWithRelationInput = {
   paymentGatewayData?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  purpose?: Prisma.SortOrder
+  purpose?: Prisma.SortOrderInput | Prisma.SortOrder
   viewerId?: Prisma.SortOrder
-  ticketId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrderInput | Prisma.SortOrder
   subscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   viewer?: Prisma.ViewerOrderByWithRelationInput
   ticket?: Prisma.TicketOrderByWithRelationInput
@@ -304,11 +304,11 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   paymentGatewayData?: Prisma.JsonNullableFilter<"Payment">
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
-  purpose?: Prisma.StringFilter<"Payment"> | string
+  purpose?: Prisma.StringNullableFilter<"Payment"> | string | null
   viewerId?: Prisma.StringFilter<"Payment"> | string
   subscriptionId?: Prisma.StringNullableFilter<"Payment"> | string | null
   viewer?: Prisma.XOR<Prisma.ViewerScalarRelationFilter, Prisma.ViewerWhereInput>
-  ticket?: Prisma.XOR<Prisma.TicketScalarRelationFilter, Prisma.TicketWhereInput>
+  ticket?: Prisma.XOR<Prisma.TicketNullableScalarRelationFilter, Prisma.TicketWhereInput> | null
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
 }, "id" | "transactionId" | "stripeEventId" | "ticketId">
 
@@ -321,9 +321,9 @@ export type PaymentOrderByWithAggregationInput = {
   paymentGatewayData?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  purpose?: Prisma.SortOrder
+  purpose?: Prisma.SortOrderInput | Prisma.SortOrder
   viewerId?: Prisma.SortOrder
-  ticketId?: Prisma.SortOrder
+  ticketId?: Prisma.SortOrderInput | Prisma.SortOrder
   subscriptionId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PaymentCountOrderByAggregateInput
   _avg?: Prisma.PaymentAvgOrderByAggregateInput
@@ -344,9 +344,9 @@ export type PaymentScalarWhereWithAggregatesInput = {
   paymentGatewayData?: Prisma.JsonNullableWithAggregatesFilter<"Payment">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Payment"> | Date | string
-  purpose?: Prisma.StringWithAggregatesFilter<"Payment"> | string
+  purpose?: Prisma.StringNullableWithAggregatesFilter<"Payment"> | string | null
   viewerId?: Prisma.StringWithAggregatesFilter<"Payment"> | string
-  ticketId?: Prisma.StringWithAggregatesFilter<"Payment"> | string
+  ticketId?: Prisma.StringNullableWithAggregatesFilter<"Payment"> | string | null
   subscriptionId?: Prisma.StringNullableWithAggregatesFilter<"Payment"> | string | null
 }
 
@@ -359,9 +359,9 @@ export type PaymentCreateInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewer: Prisma.ViewerCreateNestedOneWithoutPaymentsInput
-  ticket: Prisma.TicketCreateNestedOneWithoutPaymentInput
+  ticket?: Prisma.TicketCreateNestedOneWithoutPaymentInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutPaymentsInput
 }
 
@@ -374,9 +374,9 @@ export type PaymentUncheckedCreateInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewerId: string
-  ticketId: string
+  ticketId?: string | null
   subscriptionId?: string | null
 }
 
@@ -389,9 +389,9 @@ export type PaymentUpdateInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewer?: Prisma.ViewerUpdateOneRequiredWithoutPaymentsNestedInput
-  ticket?: Prisma.TicketUpdateOneRequiredWithoutPaymentNestedInput
+  ticket?: Prisma.TicketUpdateOneWithoutPaymentNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutPaymentsNestedInput
 }
 
@@ -404,9 +404,9 @@ export type PaymentUncheckedUpdateInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewerId?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -419,9 +419,9 @@ export type PaymentCreateManyInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewerId: string
-  ticketId: string
+  ticketId?: string | null
   subscriptionId?: string | null
 }
 
@@ -434,7 +434,7 @@ export type PaymentUpdateManyMutationInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PaymentUncheckedUpdateManyInput = {
@@ -446,9 +446,9 @@ export type PaymentUncheckedUpdateManyInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewerId?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -655,9 +655,9 @@ export type PaymentCreateWithoutSubscriptionInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewer: Prisma.ViewerCreateNestedOneWithoutPaymentsInput
-  ticket: Prisma.TicketCreateNestedOneWithoutPaymentInput
+  ticket?: Prisma.TicketCreateNestedOneWithoutPaymentInput
 }
 
 export type PaymentUncheckedCreateWithoutSubscriptionInput = {
@@ -669,9 +669,9 @@ export type PaymentUncheckedCreateWithoutSubscriptionInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewerId: string
-  ticketId: string
+  ticketId?: string | null
 }
 
 export type PaymentCreateOrConnectWithoutSubscriptionInput = {
@@ -712,9 +712,9 @@ export type PaymentScalarWhereInput = {
   paymentGatewayData?: Prisma.JsonNullableFilter<"Payment">
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
-  purpose?: Prisma.StringFilter<"Payment"> | string
+  purpose?: Prisma.StringNullableFilter<"Payment"> | string | null
   viewerId?: Prisma.StringFilter<"Payment"> | string
-  ticketId?: Prisma.StringFilter<"Payment"> | string
+  ticketId?: Prisma.StringNullableFilter<"Payment"> | string | null
   subscriptionId?: Prisma.StringNullableFilter<"Payment"> | string | null
 }
 
@@ -727,7 +727,7 @@ export type PaymentCreateWithoutTicketInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewer: Prisma.ViewerCreateNestedOneWithoutPaymentsInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutPaymentsInput
 }
@@ -741,7 +741,7 @@ export type PaymentUncheckedCreateWithoutTicketInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewerId: string
   subscriptionId?: string | null
 }
@@ -771,7 +771,7 @@ export type PaymentUpdateWithoutTicketInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewer?: Prisma.ViewerUpdateOneRequiredWithoutPaymentsNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutPaymentsNestedInput
 }
@@ -785,7 +785,7 @@ export type PaymentUncheckedUpdateWithoutTicketInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewerId?: Prisma.StringFieldUpdateOperationsInput | string
   subscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
@@ -799,8 +799,8 @@ export type PaymentCreateWithoutViewerInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
-  ticket: Prisma.TicketCreateNestedOneWithoutPaymentInput
+  purpose?: string | null
+  ticket?: Prisma.TicketCreateNestedOneWithoutPaymentInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutPaymentsInput
 }
 
@@ -813,8 +813,8 @@ export type PaymentUncheckedCreateWithoutViewerInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
-  ticketId: string
+  purpose?: string | null
+  ticketId?: string | null
   subscriptionId?: string | null
 }
 
@@ -853,9 +853,9 @@ export type PaymentCreateManySubscriptionInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
+  purpose?: string | null
   viewerId: string
-  ticketId: string
+  ticketId?: string | null
 }
 
 export type PaymentUpdateWithoutSubscriptionInput = {
@@ -867,9 +867,9 @@ export type PaymentUpdateWithoutSubscriptionInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewer?: Prisma.ViewerUpdateOneRequiredWithoutPaymentsNestedInput
-  ticket?: Prisma.TicketUpdateOneRequiredWithoutPaymentNestedInput
+  ticket?: Prisma.TicketUpdateOneWithoutPaymentNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutSubscriptionInput = {
@@ -881,9 +881,9 @@ export type PaymentUncheckedUpdateWithoutSubscriptionInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewerId?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PaymentUncheckedUpdateManyWithoutSubscriptionInput = {
@@ -895,9 +895,9 @@ export type PaymentUncheckedUpdateManyWithoutSubscriptionInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   viewerId?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PaymentCreateManyViewerInput = {
@@ -909,8 +909,8 @@ export type PaymentCreateManyViewerInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
-  purpose: string
-  ticketId: string
+  purpose?: string | null
+  ticketId?: string | null
   subscriptionId?: string | null
 }
 
@@ -923,8 +923,8 @@ export type PaymentUpdateWithoutViewerInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
-  ticket?: Prisma.TicketUpdateOneRequiredWithoutPaymentNestedInput
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticket?: Prisma.TicketUpdateOneWithoutPaymentNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutPaymentsNestedInput
 }
 
@@ -937,8 +937,8 @@ export type PaymentUncheckedUpdateWithoutViewerInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -951,8 +951,8 @@ export type PaymentUncheckedUpdateManyWithoutViewerInput = {
   paymentGatewayData?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  purpose?: Prisma.StringFieldUpdateOperationsInput | string
-  ticketId?: Prisma.StringFieldUpdateOperationsInput | string
+  purpose?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ticketId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subscriptionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -972,7 +972,7 @@ export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   ticketId?: boolean
   subscriptionId?: boolean
   viewer?: boolean | Prisma.ViewerDefaultArgs<ExtArgs>
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Payment$ticketArgs<ExtArgs>
   subscription?: boolean | Prisma.Payment$subscriptionArgs<ExtArgs>
 }, ExtArgs["result"]["payment"]>
 
@@ -990,7 +990,7 @@ export type PaymentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ticketId?: boolean
   subscriptionId?: boolean
   viewer?: boolean | Prisma.ViewerDefaultArgs<ExtArgs>
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Payment$ticketArgs<ExtArgs>
   subscription?: boolean | Prisma.Payment$subscriptionArgs<ExtArgs>
 }, ExtArgs["result"]["payment"]>
 
@@ -1008,7 +1008,7 @@ export type PaymentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   ticketId?: boolean
   subscriptionId?: boolean
   viewer?: boolean | Prisma.ViewerDefaultArgs<ExtArgs>
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Payment$ticketArgs<ExtArgs>
   subscription?: boolean | Prisma.Payment$subscriptionArgs<ExtArgs>
 }, ExtArgs["result"]["payment"]>
 
@@ -1030,17 +1030,17 @@ export type PaymentSelectScalar = {
 export type PaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "amount" | "transactionId" | "stripeEventId" | "status" | "paymentGatewayData" | "createdAt" | "updatedAt" | "purpose" | "viewerId" | "ticketId" | "subscriptionId", ExtArgs["result"]["payment"]>
 export type PaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   viewer?: boolean | Prisma.ViewerDefaultArgs<ExtArgs>
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Payment$ticketArgs<ExtArgs>
   subscription?: boolean | Prisma.Payment$subscriptionArgs<ExtArgs>
 }
 export type PaymentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   viewer?: boolean | Prisma.ViewerDefaultArgs<ExtArgs>
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Payment$ticketArgs<ExtArgs>
   subscription?: boolean | Prisma.Payment$subscriptionArgs<ExtArgs>
 }
 export type PaymentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   viewer?: boolean | Prisma.ViewerDefaultArgs<ExtArgs>
-  ticket?: boolean | Prisma.TicketDefaultArgs<ExtArgs>
+  ticket?: boolean | Prisma.Payment$ticketArgs<ExtArgs>
   subscription?: boolean | Prisma.Payment$subscriptionArgs<ExtArgs>
 }
 
@@ -1048,7 +1048,7 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Payment"
   objects: {
     viewer: Prisma.$ViewerPayload<ExtArgs>
-    ticket: Prisma.$TicketPayload<ExtArgs>
+    ticket: Prisma.$TicketPayload<ExtArgs> | null
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1060,9 +1060,9 @@ export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     paymentGatewayData: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
-    purpose: string
+    purpose: string | null
     viewerId: string
-    ticketId: string
+    ticketId: string | null
     subscriptionId: string | null
   }, ExtArgs["result"]["payment"]>
   composites: {}
@@ -1459,7 +1459,7 @@ readonly fields: PaymentFieldRefs;
 export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   viewer<T extends Prisma.ViewerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ViewerDefaultArgs<ExtArgs>>): Prisma.Prisma__ViewerClient<runtime.Types.Result.GetResult<Prisma.$ViewerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  ticket<T extends Prisma.TicketDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TicketDefaultArgs<ExtArgs>>): Prisma.Prisma__TicketClient<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ticket<T extends Prisma.Payment$ticketArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$ticketArgs<ExtArgs>>): Prisma.Prisma__TicketClient<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   subscription<T extends Prisma.Payment$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1895,6 +1895,25 @@ export type PaymentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Payments to delete.
    */
   limit?: number
+}
+
+/**
+ * Payment.ticket
+ */
+export type Payment$ticketArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Ticket
+   */
+  select?: Prisma.TicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Ticket
+   */
+  omit?: Prisma.TicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TicketInclude<ExtArgs> | null
+  where?: Prisma.TicketWhereInput
 }
 
 /**

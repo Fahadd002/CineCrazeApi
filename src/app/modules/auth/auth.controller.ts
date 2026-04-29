@@ -203,15 +203,57 @@ const resendVerificationOtp = catchAsync(
 // /api/v1/auth/login/google?redirect=/profile
 const googleLogin = catchAsync((req: Request, res: Response) => {
     const redirectPath = req.query.redirect || "/dashboard";
-
     const encodedRedirectPath = encodeURIComponent(redirectPath as string);
-
     const callbackURL = `${envVars.BETTER_AUTH_URL}/api/v1/auth/google/success?redirect=${encodedRedirectPath}`;
 
-    res.render("googleRedirect", {
-        callbackURL : callbackURL,
-        betterAuthUrl : envVars.BETTER_AUTH_URL,
-    })
+    const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Login</title>
+</head>
+<body>
+    <div>
+        <p>Redirecting To Google...</p>
+    </div>
+</body>
+<script>
+    (async () => {
+        try {
+            const response = await fetch("${envVars.BETTER_AUTH_URL}/api/auth/sign-in/social", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    provider: "google",
+                    callbackURL: "${callbackURL}"
+                })
+            });
+
+            const data = await response.json();
+
+            if(data.url){
+                window.location.href = data.url;
+            }else{
+                document.body.innerHTML = \`<div>
+                    <p>Error Occurred While Redirecting To Google. Please Try Again Later.</p>
+                </div>\`;
+            }
+        } catch (error) {
+            document.body.innerHTML = \`<div>
+                <p>Error Occurred While Redirecting To Google. Please Try Again Later.</p>
+                \${error.message}
+            </div>\`;
+        }
+    })()
+</script>
+</html>`;
+
+    res.status(200).send(html);
 })
 
 const googleLoginSuccess = catchAsync(async (req: Request, res: Response) => {

@@ -134,8 +134,9 @@ export const auth = betterAuth({
     trustedOrigins: [process.env.BETTER_AUTH_URL || "http://localhost:5000", envVars.FRONTEND_URL],
 
     advanced: {
-        // disableCSRFCheck: true,
+        cookiePrefix: "better-auth",
         useSecureCookies: envVars.NODE_ENV === "production",
+        disableCSRFCheck: true, // Allow requests without Origin header (Postman, mobile apps, etc.)
         cookies: {
             state: {
                 attributes: {

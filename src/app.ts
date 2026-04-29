@@ -26,12 +26,38 @@ app.post(
   PaymentController.handleStripeWebhookEvent
 );
 
-app.use(cors({
-    origin : [envVars.FRONTEND_URL, envVars.BETTER_AUTH_URL, "http://localhost:3000", "http://localhost:5000"],
-    credentials : true,
-    methods : ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders : ["Content-Type", "Authorization"]
-}))
+// Configure CORS to allow both production and Vercel preview deployments
+const allowedOrigins = [
+  envVars.FRONTEND_URL,
+  envVars.BETTER_AUTH_URL,
+  process.env.PROD_APP_URL,
+  "http://localhost:3000",
+  "http://localhost:5000",
+].filter(Boolean); // Remove undefined values
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+
+      // Check if origin is in allowedOrigins or matches Vercel preview pattern
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/.*\.vercel\.app$/.test(origin); // Any Vercel deployment
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
+  }),
+);
 
 
 app.use("/api/auth", toNodeHandler(auth))  
