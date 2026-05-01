@@ -72,8 +72,6 @@ export const checkAuth = (...authRoles: Role[]) => async (req: Request, res: Res
             if (!accessToken) {
                 throw new AppError(status.UNAUTHORIZED, 'Unauthorized access! No access token provided.');
             }
-
-
         }
 
         //Access Token Verification
