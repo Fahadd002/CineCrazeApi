@@ -32,7 +32,7 @@ const allowedOrigins = [
   envVars.BETTER_AUTH_URL,
   process.env.PROD_APP_URL,
   "http://localhost:3000",
-  "http://localhost:5000",
+  "https://cine-craze-api.vercel.app",
 ].filter(Boolean); // Remove undefined values
 
 app.use(
